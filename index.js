@@ -1,2 +1,2 @@
 import './main.css'
-import './game'
+import './game.js'
