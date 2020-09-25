@@ -3,37 +3,40 @@ html {
 }
 
 #container {
-  width: 55%;
+  width: 60%;
   margin: 0 auto;
   text-align: center;
-  padding-top: 30px;
+  padding-top: 20px;
   font-family: monospace;
 }
+
 img {
-  width: 50%;
+  width: 40%;
 }
 #word {
   font-size: 60px;
-  margin-top: 30px;
-  letter-spacing: 50px;
+  margin-bottom: 40px;
+  letter-spacing: 20px;
 }
-#word span {
-  width: 40px;
-  display: inline-block;
-  text-align: center;
-}
-#word span.missing {
-  color: #ece26f;
-}
-#lives {
+
+#turns {
   height: 40px;
   margin: 20px;
   margin-left: 30%;
+  margin-bottom: 20px;
   background: url("http://img1.wikia.nocookie.net/__cb20130707182655/smudgecraft/images/6/6a/Minecraft_heart-e1289789285362.png")
     top left repeat;
   background-size: auto 100%;
 }
-#buttons button {
+
+#showAnswer,
+#gameResult {
+  font-size: 30px;
+  color: black;
+  margin: 20px 0;
+}
+
+#alphabet button {
   font-size: 40px;
   border: 1px solid #a3a122;
   background-color: #d5d344;
@@ -46,47 +49,26 @@ img {
   outline: 0;
   color: mistyrose;
 }
-#buttons button:hover {
-  /*box-shadow:0 1px 5px 0 rgba(0,0,0,0.4);*/
+
+#alphabet button:hover {
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.4);
   background-color: mistyrose;
   color: #d5d344;
-}
-#buttons button:active {
-  box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.4);
-}
-#buttons button.disabled,
-#buttons button.disabled:hover,
-#buttons button.disabled:active {
-  background-color: mistyrose;
-  color: #d5d344;
-  box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.4);
-  cursor: default;
-}
-button#next {
-  font-size: 50px;
-  border: 1px solid #1b5c75;
-  background-color: #2d90b7;
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.4);
-  border-radius: 20px;
-  margin: 5px;
-  cursor: pointer;
-  outline: 0;
-  color: mistyrose;
-  margin: 40px auto 0;
-  display: none;
-}
-button#next:hover {
-  background: #eaf0f2;
-  color: #2d90b7;
 }
 
-html.gameOver {
-  background: #b72d2d;
+#alphabet button:active {
+  box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.4);
 }
-html.gameOver button#next,
-html.finished button#next {
-  display: block;
+
+#reset {
+  font-size: 50px;
+  cursor: pointer;
+  outline: 0;
+  background-color: mistyrose;
+  border: 1px solid mistyrose;
+  margin: 20px auto 0;
 }
-html.finished {
-  background: #47c177;
+
+html.over {
+  background: red;
 }

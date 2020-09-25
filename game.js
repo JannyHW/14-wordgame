@@ -1,106 +1,79 @@
-//import array of commomWords from another file 
+//import array of commomWords from another file
 import { commonWords } from "./constants.js"; // 100 words
 
-let i = 0;
-let lives = 8;
-let hit = true;
-let buttons = [];
-const charCodeA = 65;
-const charCodeZ = 90;
-let disableInput = false;
+// 1. PICK A RANDOM WORD WITH 3 LETTERS UP
+const words = commonWords.filter((word) => word.length >= 3); //77 words
 
-//Get new random word and set back
-function newWord() {
-  let threeup = commonWords.filter((word) => word.length >= 3);
-  let selected = Math.floor(Math.random() * threeup.length);
-  let word = threeup[selected].split("");
-  let letterSpan =[];
-  let letterString = "";
-  let lives = 8;
-  console.log(word);
-  document.getElementById("lives").style.width = lives * 40 + "px";
-  document.getElementById("word").innerHTML = "";
-  document.getElementsByTagName("html")[0].className = "";
-  //Remove the disabled-class from all buttons
-  for (let i = 0; i <= 25; i++) {
-    buttons[i].className = "";
-  }
-  //Create <span> for each character of the word and fill it with dashes
-  for (let i = 0; i < word.length; i++) {
-    letterSpan[i] = document.createElement("span");
-    letterSpan[i].innerHTML = "_";
-    document.getElementById("word").appendChild(letterSpan[i]);
-  }
+//create a random index
+const randomIndex = Math.floor(Math.random() * words.length);
+
+//get random words
+const word = words[randomIndex];
+console.log(word);
+
+// 2. CREATE DASHES
+let answerArray = [];
+for (let i = 0; i < word.length; i++) {
+  answerArray[i] = "_";
 }
 
-function processInput(character) {
-  //Loop through the word-array and check, if the given character matches
-  for (let i = 0; i < word.length; i++) {
-    if (word[i] == character) {
-      letterSpan[i].innerHTML = character;
-      hit = true;
-    } else if (letterSpan[i].innerHTML == "_") {
-      finished = false;
+document.querySelector("#word").innerHTML = answerArray.join("");
+
+// 3. generate letter buttons
+const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+//split into individual string
+const letters = alphabet.split("");
+
+// create btn for each letter
+let btns = letters
+  .map(
+    (letter) =>
+      `
+  <button class="letters" id="${letter}">${letter}</button>
+  `
+  )
+  .join("");
+
+// show btns on HTML
+document.getElementById("alphabet").innerHTML = btns;
+
+// 4. KEEP TRACK OF CORRECT ANSWERS
+let counter = 0;
+
+// KEEP TRACK OF TURNS
+let turns = 8;
+document.getElementById("turns").style.width = turns * 40 + "px";
+// 5. CHANGE STATE AFTER GUESS
+document.querySelector("#alphabet").addEventListener("click", (e) => {
+  e.target.disabled = true;
+  turns--;
+  document.getElementById("turns").style.width = turns * 40 + "px";
+  let guess = e.target.id; //<button class="letters" id="${letter}">${letter}</button>
+  let currentword = [];
+  for (let i = 0; i <= word.length; i++) {
+    if (word[i] === guess) {
+      answerArray[i] = guess;
+      document.querySelector("#word").innerHTML = answerArray.join("");
+      counter += 1;
+      console.log(counter);
     }
   }
-  //After the for-loop is finished, check if there was a hit
-  if (hit == true) {
-    //Set hit back to false
-    hit = false;
-  } else {
-    //Decrease lives and display them
-    lives--;
-    document.getElementById("lives").style.width = lives * 40 + "px";
-    //Check, if there are lives left
-    if (lives == 0) {
-      gameOver();
-    }
+
+  // 6. SHOW THE OUTCOME
+  if (counter === answerArray.length) {
+    document.querySelector("#gameResult").innerHTML = "🚀You win!";
   }
-  //After the for-loop is finished, check if every character is already guessed
-  let finished;
-  if (finished === true) {
-    document.getElementsByTagName("html")[0].className = "finished";
-    disableInput = true;
-  } else {
-    finished = true;
+  if (turns === 0) {
+    document.getElementsByTagName("html")[0].className = "over";
+    document.querySelector("#gameResult").innerHTML = "😥 you lose!";
+    document.querySelector(
+      "#showAnswer"
+    ).innerHTML = `The answer was: "${word}"`;
   }
-}
+});
 
-function echoButtons() {
-  let i = 0;
-
-  for (let letter = charCodeA; letter <= charCodeZ; letter++) {
-    //Create a button for every character of the alphabet
-    buttons[i] = document.createElement("button");
-    buttons[i].innerHTML = String.fromCharCode(letter);
-
-    //Create a EventListener for every button
-    buttons[i].addEventListener("click", function () {
-      if (disableInput === false) {
-        if (this.className.indexOf("disabled") == -1) {
-          processInput(this.innerHTML);
-          this.className = "disabled";
-        }
-      }
-    });
-
-    //Insert every button into the buttonContainer
-    document.getElementById("buttons").appendChild(buttons[i]);
-    i++;
-  }
-}
-
-//Reveal the missing characters of the word
-function gameOver() {
-  for (let i = 0; i < word.length; i++) {
-    if (letterSpan[i].innerHTML == "_") {
-      letterSpan[i].innerHTML = word[i];
-      letterSpan[i].className = "missing";
-    }
-  }
-  disableInput = true;
-  document.getElementsByTagName("html")[0].className = "gameOver";
-}
-document.getElementById("next").addEventListener("click", newWord);
-echoButtons();
-newWord();
+// 7 RESET
+document.querySelector("#reset").addEventListener("click", () => {
+  window.location.reload();
+});
